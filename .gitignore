@@ -1,0 +1,14 @@
+# Entorno virtual
+fastapivenv/
+.venv/
+
+# Archivos del sistema
+__pycache__/
+*.pyc
+*.log
+
+# VSCode
+.vscode/
+
+# Archivos sensibles
+.env

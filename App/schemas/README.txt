@@ -1,0 +1,1 @@
+mundo de los datos que entran o salen de la API (Pydantic)
