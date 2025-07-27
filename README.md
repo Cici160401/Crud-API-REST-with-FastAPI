@@ -31,3 +31,6 @@ bash
 Copiar
 Editar
 pytest tests/test_proyectos.py::test_crear_proyecto_exitoso
+
+$env:PYTHONPATH = "."
+pytest tests/test_comentarios.py 

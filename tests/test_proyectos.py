@@ -10,8 +10,6 @@ token = os.getenv("TEST_TOKEN")
 
 client = TestClient(app)
 
-# 🔒 Usa un token válido (puedes mockear luego, pero por ahora puedes probar con el real)
-#token = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJrYXJsYSIsImV4cCI6MTc1MzYxODc1NX0.in2s0JImTrTo00zFXFdqP5Ewn3dODXlRJFiTMQEwuF8"
 
 def test_crear_proyecto_exitoso():
     response = client.post(
