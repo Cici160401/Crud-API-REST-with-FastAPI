@@ -44,6 +44,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
           pip install pymysql
+          pip install pymysql cryptography
           pip install pytest pytest-asyncio httpx 
 
       - name: Wait for MySQL to be ready # ESTE ES EL PASO CLAVE
