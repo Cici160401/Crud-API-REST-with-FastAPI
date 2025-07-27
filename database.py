@@ -4,8 +4,14 @@ from sqlalchemy.orm import sessionmaker, Session
 import os
 from dotenv import load_dotenv
 
+# SOLO cargar dotenv si estás en local
+if os.path.exists(".env") or os.path.exists(".env.test"):
+    from dotenv import load_dotenv
+    env_file = ".env.test" if os.getenv("ENV") == "test" else ".env"
+    load_dotenv(dotenv_path=env_file)
+    
 # Cargar variables desde el archivo .env
-load_dotenv()
+#load_dotenv()
 
 # Recuperar datos desde .env
 DB_USER = os.getenv("DB_USER")

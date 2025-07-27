@@ -10,61 +10,87 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
-    env:
-      SECRET_KEY: ${{ secrets.SECRET_KEY }}
-      ALGORITHM: ${{ secrets.ALGORITHM }}
-      ACCESS_TOKEN_EXPIRE_MINUTES: ${{ secrets.ACCESS_TOKEN_EXPIRE_MINUTES }}
-      DB_USER: ${{ secrets.DB_USER }}
-      DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-      DB_HOST: ${{ secrets.DB_HOST }}
-      DB_PORT: ${{ secrets.DB_PORT }}
-      DB_NAME: ${{ secrets.DB_NAME }}
-      TEST_TOKEN: ${{ secrets.TEST_TOKEN }}
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          MYSQL_DATABASE: ${{ secrets.DB_NAME }}
+          MYSQL_USER: ${{ secrets.DB_USER }}
+          MYSQL_PASSWORD: ${{ secrets.DB_PASSWORD }}
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd=bash -c "mysqladmin ping -h 127.0.0.1 -u$$MYSQL_USER -p$$MYSQL_PASSWORD" # <--- ¡AQUÍ ESTÁ EL CAMBIO!
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=15 # Te recomiendo aumentarlo a 15 o 20 por si el MySQL tarda un poco más en inicializarse.
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
+      - uses: actions/checkout@v4
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+          cache: "pip"
 
-      # Hemos eliminado la línea problemática "python -m site --sys-paths"
-      - name: Display Python environment info (debug)
+      - name: Install build dependencies for Python packages
         run: |
-          echo "--- Python Version ---"
-          python --version
-          echo "--- Which Python ---"
-          which python
-          echo "--- Python sys.path ---"
-          python -c "import sys; print('\n'.join(sys.path))"
-          echo "--- Python User Site ---"
-          python -m site --user-site
+          sudo apt-get update
+          sudo apt-get install -y gcc python3-dev libmysqlclient-dev # Asegúrate de tener libmysqlclient-dev para pymysql
 
-      - name: Display requirements.txt content on runner
+      - name: Install Python dependencies
         run: |
-          echo "--- Content of requirements.txt ---"
-          cat requirements.txt # ESTO ES LO QUE NECESITAMOS VER
-          echo "-----------------------------------"
-
-      - name: Install dependencies (verbose)
-        run: |
-          echo "--- Upgrading pip ---"
           python -m pip install --upgrade pip
-          echo "--- Installing from requirements.txt ---"
-          pip install -r requirements.txt -v # -v para salida detallada
-          echo "--- Explicitly installing pymysql (as a fallback, check if it's needed) ---"
-          pip install pymysql -v # -v para salida detallada
+          pip install -r requirements.txt
+          pip install pymysql # No está de más asegurar, aunque si está en requirements.txt no hace falta explícitamente aquí.
+          pip install pytest pytest-asyncio httpx # Asegúrate de que estos estén si no están en requirements.txt
 
-      - name: Verify installed packages (detailed debug)
+      - name: Wait for MySQL to be ready # ESTE ES EL PASO CLAVE
+        env:
+          DB_HOST: 127.0.0.1
+          DB_PORT: 3306
+          DB_USER: ${{ secrets.DB_USER }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
         run: |
-          echo "--- Listing all installed packages ---"
-          pip list
-          echo "--- Checking pymysql details ---"
-          pip show pymysql || echo "❌ pymysql NOT FOUND after install"
+          echo "Debug: Iniciando el script de espera de MySQL."
+          echo "Esperando a que MySQL inicie en ${DB_HOST}:${DB_PORT}..."
+          # Instalar netcat si no está disponible, para 'nc'
+          sudo apt-get install -y netcat-traditional || sudo apt-get install -y netcat
+          
+          for i in $(seq 1 60); do # 60 intentos * 5 segundos = 5 minutos de espera total
+            if nc -z -v -w5 ${DB_HOST} ${DB_PORT}; then
+              echo "Debug: Intento $i - Puerto ${DB_PORT} está abierto. Ahora verificando el servicio MySQL con mysqladmin..."
+              # Asegúrate de que mysql-client esté instalado en la VM
+              # Los servicios de GitHub Actions ya suelen tenerlo, pero si hubiera problemas, esta podría ser la razón
+              if mysqladmin ping -h ${DB_HOST} -u${DB_USER} -p${DB_PASSWORD} &>/dev/null; then
+                echo "¡MySQL está funcionando y las credenciales parecen correctas!"
+                break # Si el ping es exitoso, salimos del bucle
+              else
+                echo "Debug: Intento $i - El servicio MySQL no responde al ping con las credenciales proporcionadas. Reintentando..."
+              fi
+            else
+              echo "Debug: Intento $i - El puerto ${DB_PORT} aún no está abierto. Sigo esperando..."
+            fi
+            sleep 5 # Espera 5 segundos antes del siguiente intento
+            if [ $i -eq 60 ]; then
+              echo "Error: MySQL no inició a tiempo o rechazó la conexión después de múltiples intentos. Fallando el workflow."
+              exit 1 # Si se agotan los intentos, fallar el paso
+            fi
+          done
+          echo "Debug: Script de espera de MySQL finalizado."
 
-      - name: Run tests
+      - name: Run tests # Tu paso para ejecutar los tests
+        env:
+          SECRET_KEY: ${{ secrets.SECRET_KEY }}
+          ALGORITHM: ${{ secrets.ALGORITHM }}
+          ACCESS_TOKEN_EXPIRE_MINUTES: ${{ secrets.ACCESS_TOKEN_EXPIRE_MINUTES }}
+          DB_USER: ${{ secrets.DB_USER }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          DB_HOST: 127.0.0.1
+          DB_PORT: 3306
+          DB_NAME: ${{ secrets.DB_NAME }}
+          TEST_TOKEN: ${{ secrets.TEST_TOKEN }}
         run: |
           export PYTHONPATH=.
           pytest tests/
