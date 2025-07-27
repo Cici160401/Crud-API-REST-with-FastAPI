@@ -1,10 +1,10 @@
-name: test
+name: Run Tests
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   test:
@@ -13,19 +13,18 @@ jobs:
     services:
       mysql:
         image: mysql:8.0
-        env:
-          MYSQL_ROOT_PASSWORD: ${{ secrets.DB_PASSWORD }}
-          MYSQL_DATABASE: ${{ secrets.DB_NAME }}
-          MYSQL_USER: ${{ secrets.DB_USER }}
-          MYSQL_PASSWORD: ${{ secrets.DB_PASSWORD }}
         ports:
           - 3306:3306
+        env:
+          MYSQL_ROOT_PASSWORD: coralito2025
+          MYSQL_DATABASE: portafolio
+          MYSQL_USER: root  
+          MYSQL_PASSWORD: coralito2025
         options: >-
-          --health-cmd="bash -c 'mysqladmin ping -h 127.0.0.1 -u$$MYSQL_USER -p$$MYSQL_PASSWORD'"
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -uroot -pcoralito2025"
           --health-interval=10s
           --health-timeout=5s
           --health-retries=15
-          --default-authentication-plugin=mysql_native_password
 
     steps:
       - uses: actions/checkout@v4
@@ -55,15 +54,17 @@ jobs:
           DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
         run: |
           for i in $(seq 1 60); do
-            if nc -z -v -w5 ${DB_HOST} ${DB_PORT}; then
-              if mysqladmin ping -h ${DB_HOST} -u${DB_USER} -p${DB_PASSWORD} &>/dev/null; then
-                echo "MySQL está listo"
+            if nc -z ${DB_HOST} ${DB_PORT}; then
+              echo "MySQL port ${DB_PORT} is open"
+              if mysqladmin ping -h ${DB_HOST} -u${DB_USER} -p${DB_PASSWORD} --silent; then
+                echo "MySQL is ready"
                 break
               fi
             fi
-            sleep 5
+            echo "Waiting for MySQL ($i)..."
+            sleep 2
             if [ $i -eq 60 ]; then
-              echo "Error: MySQL no respondió"
+              echo "MySQL did not become ready in time"
               exit 1
             fi
           done
