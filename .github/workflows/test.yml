@@ -14,16 +14,17 @@ jobs:
       mysql:
         image: mysql:8.0
         env:
-          MYSQL_ROOT_PASSWORD: ${{ secrets.DB_PASSWORD }}
-          MYSQL_DATABASE: ${{ secrets.DB_NAME }}
-          MYSQL_USER: ${{ secrets.DB_USER }}
-          MYSQL_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          MYSQL_ROOT_PASSWORD: rootpass
+          MYSQL_DATABASE: testdb
+          MYSQL_USER: testuser
+          MYSQL_PASSWORD: testpass
         ports:
           - 3306:3306
-        options: >-          
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -utestuser -ptestpass"
           --health-interval=10s
           --health-timeout=5s
-          --health-retries=15 
+          --health-retries=15
 
     steps:
       - uses: actions/checkout@v4
