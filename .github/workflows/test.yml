@@ -23,7 +23,7 @@ jobs:
         options: >-          
           --health-interval=10s
           --health-timeout=5s
-          --health-retries=15 # Te recomiendo aumentarlo a 15 o 20 por si el MySQL tarda un poco más en inicializarse.
+          --health-retries=15 
 
     steps:
       - uses: actions/checkout@v4
