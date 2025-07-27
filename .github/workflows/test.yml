@@ -21,11 +21,11 @@ jobs:
         ports:
           - 3306:3306
         options: >-
-          - --health-cmd=bash -c "mysqladmin ping -h 127.0.0.1 -u$$MYSQL_USER -p$$MYSQL_PASSWORD" # <--- ¡CAMBIO AQUÍ!
-          - --health-interval=10s
-          - --health-timeout=5s
-          - --health-retries=15
-          - --default-authentication-plugin=mysql_native_password
+          --health-cmd="bash -c 'mysqladmin ping -h 127.0.0.1 -u$$MYSQL_USER -p$$MYSQL_PASSWORD'"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=15
+          --default-authentication-plugin=mysql_native_password
 
     steps:
       - uses: actions/checkout@v4
