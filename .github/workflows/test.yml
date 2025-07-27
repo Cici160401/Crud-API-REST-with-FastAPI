@@ -17,8 +17,7 @@ jobs:
           - 3306:3306
         env:
           MYSQL_ROOT_PASSWORD: coralito2025
-          MYSQL_DATABASE: portafolio
-          MYSQL_USER: root  
+          MYSQL_DATABASE: portafolio            
           MYSQL_PASSWORD: coralito2025
         options: >-
           --health-cmd="mysqladmin ping -h 127.0.0.1 -uroot -pcoralito2025"
