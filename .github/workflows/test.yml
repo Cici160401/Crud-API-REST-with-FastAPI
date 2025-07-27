@@ -10,7 +10,7 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
-    env:  # <- Aquí usas los secrets como variables de entorno
+    env:
       SECRET_KEY: ${{ secrets.SECRET_KEY }}
       ALGORITHM: ${{ secrets.ALGORITHM }}
       ACCESS_TOKEN_EXPIRE_MINUTES: ${{ secrets.ACCESS_TOKEN_EXPIRE_MINUTES }}
@@ -35,7 +35,11 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Set PYTHONPATH and run tests
+      - name: Verify pymysql installation (debug)
+        run: |
+          pip show pymysql || echo "❌ pymysql NOT FOUND"
+
+      - name: Run tests
         run: |
           export PYTHONPATH=.
           pytest tests/
