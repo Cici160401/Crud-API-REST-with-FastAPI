@@ -28,21 +28,25 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: "3.12" # Asegúrate de que esta es la versión correcta para tu proyecto
+          python-version: "3.12"
 
-      - name: Display Python version and path (debug)
+      # Hemos eliminado la línea problemática "python -m site --sys-paths"
+      - name: Display Python environment info (debug)
         run: |
           echo "--- Python Version ---"
           python --version
           echo "--- Which Python ---"
-          # En Ubuntu (GitHub Actions) 'which python' funciona
           which python
           echo "--- Python sys.path ---"
           python -c "import sys; print('\n'.join(sys.path))"
           echo "--- Python User Site ---"
           python -m site --user-site
-          echo "--- Python System Paths ---"
-          python -m site --sys-paths
+
+      - name: Display requirements.txt content on runner
+        run: |
+          echo "--- Content of requirements.txt ---"
+          cat requirements.txt # ESTO ES LO QUE NECESITAMOS VER
+          echo "-----------------------------------"
 
       - name: Install dependencies (verbose)
         run: |
@@ -50,10 +54,10 @@ jobs:
           python -m pip install --upgrade pip
           echo "--- Installing from requirements.txt ---"
           pip install -r requirements.txt -v # -v para salida detallada
-          echo "--- Explicitly installing pymysql ---"
+          echo "--- Explicitly installing pymysql (as a fallback, check if it's needed) ---"
           pip install pymysql -v # -v para salida detallada
 
-      - name: Verify pymysql installation (detailed debug)
+      - name: Verify installed packages (detailed debug)
         run: |
           echo "--- Listing all installed packages ---"
           pip list
