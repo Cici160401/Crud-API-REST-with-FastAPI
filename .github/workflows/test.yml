@@ -36,14 +36,14 @@ jobs:
       - name: Install build dependencies for Python packages
         run: |
           sudo apt-get update
-          sudo apt-get install -y gcc python3-dev libmysqlclient-dev # Asegúrate de tener libmysqlclient-dev para pymysql
+          sudo apt-get install -y gcc python3-dev libmysqlclient-dev
 
       - name: Install Python dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-          pip install pymysql # No está de más asegurar, aunque si está en requirements.txt no hace falta explícitamente aquí.
-          pip install pytest pytest-asyncio httpx # Asegúrate de que estos estén si no están en requirements.txt
+          pip install pymysql
+          pip install pytest pytest-asyncio httpx 
 
       - name: Wait for MySQL to be ready # ESTE ES EL PASO CLAVE
         env:
