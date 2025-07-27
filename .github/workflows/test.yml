@@ -28,16 +28,37 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: "3.12"
+          python-version: "3.12" # Asegúrate de que esta es la versión correcta para tu proyecto
 
-      - name: Install dependencies
+      - name: Display Python version and path (debug)
         run: |
+          echo "--- Python Version ---"
+          python --version
+          echo "--- Which Python ---"
+          # En Ubuntu (GitHub Actions) 'which python' funciona
+          which python
+          echo "--- Python sys.path ---"
+          python -c "import sys; print('\n'.join(sys.path))"
+          echo "--- Python User Site ---"
+          python -m site --user-site
+          echo "--- Python System Paths ---"
+          python -m site --sys-paths
+
+      - name: Install dependencies (verbose)
+        run: |
+          echo "--- Upgrading pip ---"
           python -m pip install --upgrade pip
-          pip install -r requirements.txt
+          echo "--- Installing from requirements.txt ---"
+          pip install -r requirements.txt -v # -v para salida detallada
+          echo "--- Explicitly installing pymysql ---"
+          pip install pymysql -v # -v para salida detallada
 
-      - name: Verify pymysql installation (debug)
+      - name: Verify pymysql installation (detailed debug)
         run: |
-          pip show pymysql || echo "❌ pymysql NOT FOUND"
+          echo "--- Listing all installed packages ---"
+          pip list
+          echo "--- Checking pymysql details ---"
+          pip show pymysql || echo "❌ pymysql NOT FOUND after install"
 
       - name: Run tests
         run: |
