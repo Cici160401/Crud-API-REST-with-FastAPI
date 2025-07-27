@@ -17,7 +17,7 @@ jobs:
           - 3306:3306
         env:
           MYSQL_ROOT_PASSWORD: coralito2025
-          MYSQL_DATABASE: portafolio            
+          MYSQL_DATABASE: portafolio
           MYSQL_PASSWORD: coralito2025
         options: >-
           --health-cmd="mysqladmin ping -h 127.0.0.1 -uroot -pcoralito2025"
@@ -49,8 +49,8 @@ jobs:
         env:
           DB_HOST: 127.0.0.1
           DB_PORT: 3306
-          DB_USER: ${{ secrets.DB_USER }}
-          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          DB_USER: root
+          DB_PASSWORD: coralito2025
         run: |
           for i in $(seq 1 60); do
             if nc -z ${DB_HOST} ${DB_PORT}; then
@@ -73,11 +73,11 @@ jobs:
           SECRET_KEY: ${{ secrets.SECRET_KEY }}
           ALGORITHM: ${{ secrets.ALGORITHM }}
           ACCESS_TOKEN_EXPIRE_MINUTES: ${{ secrets.ACCESS_TOKEN_EXPIRE_MINUTES }}
-          DB_USER: ${{ secrets.DB_USER }}
-          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          DB_USER: root
+          DB_PASSWORD: coralito2025
           DB_HOST: 127.0.0.1
           DB_PORT: 3306
-          DB_NAME: ${{ secrets.DB_NAME }}
+          DB_NAME: portafolio
           TEST_TOKEN: ${{ secrets.TEST_TOKEN }}
         run: |
           export PYTHONPATH=.
