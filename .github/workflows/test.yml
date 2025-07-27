@@ -37,7 +37,8 @@ jobs:
       - name: Install system dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y gcc python3-dev libmysqlclient-dev netcat
+          sudo apt-get install -y gcc python3-dev libmysqlclient-dev netcat-traditional
+          
 
       - name: Install Python dependencies
         run: |
