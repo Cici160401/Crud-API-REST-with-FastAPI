@@ -70,6 +70,7 @@ jobs:
           done
       - name: Run Alembic migrations
         env:
+          ENV: test
           DB_USER: root
           DB_PASSWORD: coralito2025
           DB_HOST: 127.0.0.1
@@ -81,6 +82,7 @@ jobs:
           
       - name: Run tests
         env:
+          ENV: test
           SECRET_KEY: ${{ secrets.SECRET_KEY }}
           ALGORITHM: ${{ secrets.ALGORITHM }}
           ACCESS_TOKEN_EXPIRE_MINUTES: ${{ secrets.ACCESS_TOKEN_EXPIRE_MINUTES }}

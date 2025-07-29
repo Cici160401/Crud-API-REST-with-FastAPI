@@ -5,10 +5,13 @@ import os
 from dotenv import load_dotenv
 
 # SOLO cargar dotenv si estás en local
-if os.path.exists(".env") or os.path.exists(".env.test"):
-    from dotenv import load_dotenv
-    env_file = ".env.test" if os.getenv("ENV") == "test" else ".env"
-    load_dotenv(dotenv_path=env_file)
+#if os.path.exists(".env") or os.path.exists(".env.test"):
+#    from dotenv import load_dotenv
+#    env_file = ".env.test" if os.getenv("ENV") == "test" else ".env"
+#    load_dotenv(dotenv_path=env_file)
+
+# Detecta si es entorno de test
+env_file = ".env.test" if os.getenv("ENV") == "test" else ".env"
     
 # Cargar variables desde el archivo .env
 #load_dotenv()
