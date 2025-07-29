@@ -1,9 +1,11 @@
 from sqlalchemy import Column, Integer, String, Text, Enum, Boolean, DateTime
 from sqlalchemy.sql import func
-from database import Base
+#from database import Base
+from App.models.base import Base
 from sqlalchemy.orm import relationship
 from App.models import proyecto_categoria
 import enum
+
 
 #Importamos func.now() para que MySQL cree la fecha de creación automáticamente.
 #Importamos Base, que es la clase base para definir modelos SQLAlchemy.

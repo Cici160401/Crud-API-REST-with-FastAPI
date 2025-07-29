@@ -68,7 +68,17 @@ jobs:
               exit 1
             fi
           done
-
+      - name: Run Alembic migrations
+        env:
+          DB_USER: root
+          DB_PASSWORD: coralito2025
+          DB_HOST: 127.0.0.1
+          DB_PORT: 3306
+          DB_NAME: portafolio
+        run: |
+          export PYTHONPATH=.
+          alembic upgrade head
+          
       - name: Run tests
         env:
           SECRET_KEY: ${{ secrets.SECRET_KEY }}

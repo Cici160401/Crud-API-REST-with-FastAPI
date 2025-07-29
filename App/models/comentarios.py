@@ -1,7 +1,8 @@
 from sqlalchemy import Column, Integer, String, Text, DateTime, ForeignKey
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
-from database import Base
+#from database import Base
+from App.models.base import Base
 
 class Comentario(Base):
     __tablename__="comentarios"
