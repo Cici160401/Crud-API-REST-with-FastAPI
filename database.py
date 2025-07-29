@@ -11,7 +11,10 @@ from dotenv import load_dotenv
 #    load_dotenv(dotenv_path=env_file)
 
 # Detecta si es entorno de test
-env_file = ".env.test" if os.getenv("ENV") == "test" else ".env"
+if os.getenv("ENV") == "test":
+    load_dotenv(".env.test")
+else:
+    load_dotenv(".env")
     
 # Cargar variables desde el archivo .env
 #load_dotenv()

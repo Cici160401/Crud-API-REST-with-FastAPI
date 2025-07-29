@@ -68,6 +68,9 @@ jobs:
               exit 1
             fi
           done
+      - name: Set ENV=test para forzar uso de .env.test
+        run: echo "ENV=test" >> $GITHUB_ENV
+
       - name: Run Alembic migrations
         env:
           ENV: test
@@ -79,7 +82,21 @@ jobs:
         run: |
           export PYTHONPATH=.
           alembic upgrade head
-          
+
+      - name: Verifica que las tablas existen
+        run: |
+          mysql -h 127.0.0.1 -uroot -pcoralito2025 -e "USE portafolio; SHOW TABLES;"
+      
+      - name: Echo database URL (solo para debug temporal)
+        run: |
+          echo "mysql+pymysql://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_NAME}"
+        env:
+          DB_USER: root
+          DB_PASSWORD: coralito2025
+          DB_HOST: 127.0.0.1
+          DB_PORT: 3306
+          DB_NAME: portafolio  
+
       - name: Run tests
         env:
           ENV: test
