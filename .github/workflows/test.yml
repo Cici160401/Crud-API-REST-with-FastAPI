@@ -90,6 +90,7 @@ jobs:
       - name: Echo database URL (solo para debug temporal)
         run: |
           echo "mysql+pymysql://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_NAME}"
+          
         env:
           DB_USER: root
           DB_PASSWORD: coralito2025
