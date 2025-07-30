@@ -1,6 +1,15 @@
-from . import categorias
-from . import comentarios
-from . import proyecto
-from . import proyecto_categoria
-from . import usuarios
-from . import base
+from .base import Base
+from .proyecto import Proyecto
+from .usuarios import Usuario
+from .comentarios import Comentario
+from .categorias import Categoria
+from .proyecto_categoria import ProyectoCategoria
+
+__all__ = [
+    "Base",
+    "Proyecto",
+    "Usuario",
+    "Comentario",
+    "Categoria",
+    "ProyectoCategoria",
+]
