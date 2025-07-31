@@ -26,10 +26,10 @@ router = APIRouter (
 def crear_nuevo_comentario(
     comentario: ComentarioCreate,
     db: Session = Depends(get_db),
-    user: dict = Depends(get_current_user)  # ahora acepta guest también
+    user: Usuario = Depends(get_current_user)  # ahora acepta guest también
 ):
      # Asignamos autor automáticamente desde el token creado en /login/guest
-    autor = user.username if hasattr(user, "username") else user.get("username", "Invitado")
+    autor = user.username #if hasattr(user, "username") else user.get("username", "Invitado")
     
      # Creamos una copia del comentario con autor incluido
     comentario_dict = comentario.model_dump()
