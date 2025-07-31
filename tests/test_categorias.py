@@ -58,7 +58,7 @@ def test_actualizar_categorias(admin_token):
         f"/categorias/{categoria_id}",
         headers={"Authorization": admin_token},
         json={
-            "nombre": "Categoria Actualizado"            
+            "nombre": "Categoria Actualizada"            
         }
     )
     assert response_put.status_code == 200
