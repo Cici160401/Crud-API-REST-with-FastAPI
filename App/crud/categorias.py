@@ -46,7 +46,7 @@ def eliminar_categoria(db: Session, categoria_id : int):
     if categoria:
         db.delete(categoria)
         db.commit()
-        db.refresh(categoria)
+        #db.refresh(categoria)
     return categoria
 
 
