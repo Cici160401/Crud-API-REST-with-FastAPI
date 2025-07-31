@@ -3,7 +3,7 @@ from datetime import datetime
 from typing import Optional 
 
 class ComentarioBase (BaseModel):
-    autor: str
+    autor: Optional[str] = None
     contenido: str
 
 class ComentarioCreate (ComentarioBase):

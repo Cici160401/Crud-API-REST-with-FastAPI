@@ -22,9 +22,22 @@ router = APIRouter (
     tags=["Comentarios"]
 )
 # RUTA POST PARA CREAR COMENTARIO
-@router.post("/",response_model=Comentario)
-def crear_nuevo_comentario(comentario:ComentarioCreate, db: Session= Depends(get_db)):    
-    return crear_comentario(db, comentario)
+@router.post("/", response_model=Comentario)
+def crear_nuevo_comentario(
+    comentario: ComentarioCreate,
+    db: Session = Depends(get_db),
+    user: dict = Depends(get_current_user)  # ahora acepta guest también
+):
+     # Asignamos autor automáticamente desde el token creado en /login/guest
+    autor = user.username if hasattr(user, "username") else user.get("username", "Invitado")
+    
+     # Creamos una copia del comentario con autor incluido
+    comentario_dict = comentario.model_dump()
+    comentario_dict["autor"] = autor
+    nuevo_comentario = ComentarioCreate(**comentario_dict)
+
+    # Guardamos el comentario
+    return crear_comentario(db, nuevo_comentario)
 
 #RUTA GET PARA LISTAR LOS COMENTARIOS DE UN PROYECTO
 @router.get("/proyectos/{proyecto_id}",response_model=List[Comentario])

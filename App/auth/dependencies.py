@@ -2,6 +2,7 @@ from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from jose import JWTError, jwt
 from App.config import settings
+from typing import Union
 from sqlalchemy.orm import Session
 from App.auth.jwt_handler import decode_access_token
 from App.models.usuarios import Usuario
@@ -14,9 +15,8 @@ from database import get_db
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="auth/login")
 
 #Esta función depende de que el usuario dé un token, si no, fastapi responde que necesita autenticarse
-def get_current_user(token: str = Depends(oauth2_scheme),db: Session = Depends(get_db)):
+def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)) -> Union[Usuario, dict]:
     credentials_exception = HTTPException(
-        #Si no hay token o es inválido, devolvemos esta excepción personalizada con un error 401 (no autorizado).
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="No se pudo validar el token",
         headers={"WWW-Authenticate": "Bearer"},
@@ -25,11 +25,18 @@ def get_current_user(token: str = Depends(oauth2_scheme),db: Session = Depends(g
         payload = decode_access_token(token)
         if payload is None:
             raise credentials_exception
+
         username: str = payload.get("sub")
+        role: str = payload.get("role", "user")  # ← nuevo
+
         if username is None:
             raise credentials_exception
 
-        # Aquí buscamos al usuario completo en la base
+        # ✔ Si es invitado, devolvemos un dict especial (sin acceder a la DB)
+        if role == "guest":
+            return {"username": "guest", "role": "guest"}
+
+        # ✔ Usuarios reales
         user = db.query(Usuario).filter(Usuario.username == username).first()
         if user is None:
             raise credentials_exception

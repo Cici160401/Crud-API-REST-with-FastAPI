@@ -26,5 +26,10 @@ def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depend
     #Retorna un diccionario con el access_token, que será usado en las siguientes peticiones como autenticación.
 
     #Si existiera roles para los usuarios, aquí se declararía: data={"sub": user.username, "rol": user.rol}
-    token = create_access_token(data={"sub": user.username})
+    token = create_access_token(data={"sub": user.username,"role": "admin"})
+    return {"access_token": token, "token_type": "bearer"}
+
+@router.post("/login/guest")
+def login_guest():
+    token = create_access_token(data={"sub": "guest", "role": "guest"})
     return {"access_token": token, "token_type": "bearer"}

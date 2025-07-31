@@ -20,6 +20,7 @@ app.include_router(categorias.router)
 app.include_router(comentarios.router)
 
 
+
 #@app.get('/')
 #def read_root():
 #    return {"welcome": "Welcome to my API"}
