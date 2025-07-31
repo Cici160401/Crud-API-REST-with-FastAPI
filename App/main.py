@@ -13,6 +13,7 @@ app = FastAPI(
     version="1.0.0"
 )
 
+@app.get("/")
 def read_root():
     return {"message": "¡Bienvenido a mi API REST con FastAPI! Ve a /docs para ver la documentación 📚"}
 
