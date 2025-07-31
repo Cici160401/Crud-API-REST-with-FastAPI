@@ -12,6 +12,11 @@ app = FastAPI(
     description="CRUD para gestionar proyectos del portafolio personal",
     version="1.0.0"
 )
+
+def read_root():
+    return {"message": "¡Bienvenido a mi API REST con FastAPI! Ve a /docs para ver la documentación 📚"}
+
+
 app.include_router(auth.router)
 
 # Registrar las rutas del módulo proyectos
