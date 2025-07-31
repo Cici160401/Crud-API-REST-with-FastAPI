@@ -62,7 +62,9 @@ Se ejecuta en cada push
 
 Instala dependencias
 
-Corre los tests automáticos en tests/
+Corre los tests automáticos con pytest tests/test_....
+También existe un apartado la carpeta vscode donde el archivo tasks.json te ayuda a automatizar la ejecución de los tests
+dentro de VS Code con el botón Run all (Accedes con Ctrl + Shift + P y buscas Run ALL tests)
 
 Esto asegura que cada cambio no rompa funcionalidades existentes.
 
