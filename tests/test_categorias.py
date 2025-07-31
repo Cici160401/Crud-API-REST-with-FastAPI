@@ -70,8 +70,13 @@ def test_actualizar_categorias(admin_token):
     assert response_put.json()["nombre"] == "Categoria Actualizada"
 
 def test_eliminar_categoria(admin_token):
-    eliminar_categoria_si_existe("Categoria Eliminable", admin_token)
+    # Elimina si ya existe una categoría con ese nombre
+    response_list = client.get("/categorias/")
+    for cat in response_list.json():
+        if cat["nombre"] == "Categoria Eliminable":
+            client.delete(f"/categorias/{cat['id']}", headers={"Authorization": admin_token})
 
+    # Crear categoría nueva
     response_post = client.post(
         "/categorias/",
         headers={"Authorization": admin_token},
@@ -80,8 +85,15 @@ def test_eliminar_categoria(admin_token):
     assert response_post.status_code == 200
     categoria_id = response_post.json()["id"]
 
-    response_delete = client.delete(f"/categorias/{categoria_id}", headers={"Authorization": admin_token})
-    assert response_delete.status_code == 204
+    # Eliminarla
+    response_delete = client.delete(
+        f"/categorias/{categoria_id}",
+        headers={"Authorization": admin_token}
+    )
+    assert response_delete.status_code == 200
+    data = response_delete.json()
+    assert data["mensaje"] == "Categoría eliminada con éxito"
 
+    # Verifica que ya no existe
     response_get = client.get(f"/categorias/{categoria_id}")
     assert response_get.status_code == 404
