@@ -34,7 +34,8 @@ def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(
 
         # ✔ Si es invitado, devolvemos un dict especial (sin acceder a la DB)
         if role == "guest":
-            return {"username": "guest", "role": "guest"}
+            #return {"username": "guest", "role": "guest"}
+            return Usuario(username="guest", email="guest@example.com", es_admin=False)
 
         # ✔ Usuarios reales
         user = db.query(Usuario).filter(Usuario.username == username).first()
