@@ -108,19 +108,23 @@ Y muchos otros. Consulta /docs para ver la lista completa generada con Swagger.
 ## 🗄️ Estructura del proyecto
 
 Crud-API-REST-with-FastAPI/
+│
 ├── App/
-│   ├── main.py
-│   ├── models/
-│   ├── schemas/
-│   ├── routes/
-│   ├── crud/
-│   └── auth/
-├── tests/
+│   ├── main.py               # Punto de entrada de la API
+│   ├── models/               # Modelos de SQLAlchemy
+│   ├── schemas/              # Esquemas de Pydantic
+│   ├── routes/               # Endpoints agrupados por entidad
+│   ├── crud/                 # Lógica CRUD
+│   └── auth/                 # Lógica de autenticación (JWT, roles, etc.)
+│
+├── tests/                    # Pruebas automatizadas con Pytest
+│
 ├── .github/
 │   └── workflows/
-│       └── test.yml
-├── requirements.txt
-└── README.md
+│       └── test.yml          # Workflow para correr tests en GitHub Actions
+│
+├── requirements.txt          # Dependencias del proyecto
+└── README.md                 # Documentación principal
 
 
 ## Licencia
