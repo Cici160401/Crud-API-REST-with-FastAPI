@@ -1,107 +1,125 @@
-Portafolio Projects API
+## CRUD API REST with FastAPI
 
-Una API REST construida con FastAPI para administrar proyectos, categorías y comentarios en un portafolio de desarrollador. Ideal para integrarse con un frontend o servir como backend autónomo.
+![Test](https://github.com/Cici160401/Crud-API-REST-with-FastAPI/actions/workflows/test.yml/badge.svg)
 
-🚀 Tecnologías usadas
+Este es un proyecto de una API REST desarrollada con FastAPI, que permite gestionar un portafolio de proyectos. Incluye autenticación JWT, relaciones entre modelos, roles de usuario (admin e invitado), y pruebas automatizadas.
+
+## 📌 Descripción del Proyecto
+
+Esta API permite gestionar:
+
+Usuarios con roles diferenciados (admin e invitado).
+
+Categorías de proyectos.
+
+Proyectos con atributos como nombre, descripción, tecnologías, links y categorización.
+
+Comentarios asociados a proyectos.
+
+La API está diseñada para integrarse eventualmente con un frontend y estar lista para despliegue en producción.
+
+## 🚀 Funcionalidades
+
+Registro y login de usuario con JWT
+
+Creación, lectura, actualización y eliminación (CRUD) de proyectos
+
+Asociación de proyectos a múltiples categorías
+
+Comentarios de usuarios (incluyendo invitados autenticados)
+
+Rutas protegidas según rol
+
+Validaciones con Pydantic
+
+## 🛠 Tecnologías utilizadas
 
 FastAPI
 
-SQLAlchemy + MySQL (via ORM)
+SQLAlchemy
 
-Pydantic (validación de datos)
+SQLite (puede ser sustituido por PostgreSQL)
 
-JWT Auth (OAuth Bearer) (autenticación con tokens)
+Pydantic
 
-pytest (para pruebas automatizadas)
+Passlib (hashing de contraseñas)
 
-Render (para despliegue)
+PyJWT
 
-🔎 Características principales
+pytest
 
-💼 Proyectos
+GitHub Actions para CI
 
-Crear, listar, obtener por ID, actualizar y eliminar proyectos
+## 🧪 Testing con GitHub Actions
 
-Asociar proyectos a una o más categorías
+El proyecto incluye un flujo de trabajo en .github/workflows/test.yml que:
 
-Atributos:
+Se ejecuta en cada push
 
-nombre, descripcion, tecnologias, estado, imagen, url_repo, url_demo, destacado, fecha_creacion
+Instala dependencias
 
-📅 Categorías
+Corre los tests automáticos en tests/
 
-Crear, listar, obtener por ID, actualizar y eliminar categorías
+Esto asegura que cada cambio no rompa funcionalidades existentes.
 
-Las categorías se pueden asociar a proyectos
+## 🔧 Instalación y uso local
 
-💬 Comentarios
+Clona el repositorio:
 
-Crear comentarios por usuarios invitados o autenticados
+git clone https://github.com/Cici160401/Crud-API-REST-with-FastAPI.git
+cd Crud-API-REST-with-FastAPI
 
-Listar todos los comentarios o filtrar por proyecto_id
+Crea un entorno virtual e instálalo:
 
-Eliminar comentarios (solo admin)
-
-🔐 Autenticación y roles
-
-Autenticación con JWT:
-
-/login: para admin
-
-/login/guest: para obtener un token como invitado
-
-Roles disponibles:
-
-admin: puede crear, editar y eliminar todo
-
-guest: solo puede crear comentarios y ver proyectos/categorías
-
-✅ Endpoints principales (resumen)
-
-Proyectos
-
-GET     /proyectos/            # Listar proyectos
-POST    /proyectos/            # Crear nuevo proyecto (admin)
-GET     /proyectos/{id}        # Ver un proyecto específico
-PUT     /proyectos/{id}        # Actualizar proyecto (admin)
-DELETE  /proyectos/{id}        # Eliminar proyecto (admin)
-
-Categorías
-
-GET     /categorias/           # Listar categorías
-POST    /categorias/           # Crear categoría (admin)
-GET     /categorias/{id}       # Ver categoría por ID
-PUT     /categorias/{id}       # Actualizar categoría (admin)
-DELETE  /categorias/{id}       # Eliminar categoría (admin)
-
-Comentarios
-
-GET     /comentarios/                          # Listar todos los comentarios
-GET     /comentarios/proyectos/{id}            # Comentarios de un proyecto
-POST    /comentarios/                          # Crear comentario (cualquiera)
-DELETE  /comentarios/{id}                      # Eliminar comentario (admin)
-
-⚙️ Instalación local (opcional)
-
-git clone https://github.com/tuusuario/portafolio-api.git
-cd portafolio-api
-python -m venv env
-source env/bin/activate  # o env\Scripts\activate en Windows
+python -m venv venv
+source venv/bin/activate  # o venv\Scripts\activate en Windows
 pip install -r requirements.txt
+
+Inicia el servidor:
+
 uvicorn App.main:app --reload
 
-Visita: http://localhost:8000/docs
+Abre la documentación interactiva:
 
-💡 Notas adicionales
+http://localhost:8000/docs
 
-Las pruebas están en tests/
+## 📆 Endpoints principales
 
-Puedes correrlas con: pytest tests/test_...
+POST /login: login de usuario
 
-Archivo .env define variables sensibles como la DB y secret key
+POST /login/guest: login como invitado (genera token sin base de datos)
 
-Despliegue recomendado en Render
+GET /proyectos/: listar todos los proyectos
 
-🙏 Agradecimientos
+POST /proyectos/: crear proyecto (solo admin)
 
-Gracias a FastAPI y a todos los que me brindaron motivación ✨
+GET /categorias/: listar categorías
+
+POST /comentarios/: crear comentario (cualquier usuario autenticado)
+
+Y muchos otros. Consulta /docs para ver la lista completa generada con Swagger.
+
+## 🗄️ Estructura del proyecto
+
+Crud-API-REST-with-FastAPI/
+├── App/
+│   ├── main.py
+│   ├── models/
+│   ├── schemas/
+│   ├── routes/
+│   ├── crud/
+│   └── auth/
+├── tests/
+├── .github/
+│   └── workflows/
+│       └── test.yml
+├── requirements.txt
+└── README.md
+
+
+## Licencia
+
+Este proyecto está bajo la licencia MIT. Puedes usarlo y modificarlo libremente.
+
+
+Desarrollado con ❤️ por Cici160401
