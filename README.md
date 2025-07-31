@@ -2,6 +2,10 @@
 
 ![Test](https://github.com/Cici160401/Crud-API-REST-with-FastAPI/actions/workflows/test.yml/badge.svg)
 
+![last commit](https://img.shields.io/github/last-commit/Cici160401/Crud-API-REST-with-FastAPI)
+
+![Python](https://img.shields.io/badge/Python-3.12-blue)
+
 Este es un proyecto de una API REST desarrollada con FastAPI, que permite gestionar un portafolio de proyectos. Incluye autenticación JWT, relaciones entre modelos, roles de usuario (admin e invitado), y pruebas automatizadas.
 
 ## 📌 Descripción del Proyecto
