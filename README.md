@@ -42,7 +42,7 @@ FastAPI
 
 SQLAlchemy
 
-SQLite (puede ser sustituido por PostgreSQL)
+MySQL
 
 Pydantic
 
