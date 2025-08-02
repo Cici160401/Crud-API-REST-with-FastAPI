@@ -6,6 +6,8 @@
 
 ![Python](https://img.shields.io/badge/Python-3.12-blue)
 
+markdown<br>[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/Cici160401/Crud-API-REST-with-FastAPI)
+
 Este es un proyecto de una API REST desarrollada con FastAPI, que permite gestionar un portafolio de proyectos. Incluye autenticación JWT, relaciones entre modelos, roles de usuario (admin e invitado), y pruebas automatizadas.
 
 ## 📌 Descripción del Proyecto
