@@ -10,6 +10,8 @@
 
 ![Hosted on Render](https://img.shields.io/badge/Hosted_on-Render-4287f5?logo=render&logoColor=white&style=flat-square)
 
+https://crud-api-rest-with-fastapi.onrender.com
+
 Este es un proyecto de una API REST desarrollada con FastAPI, que permite gestionar un portafolio de proyectos. Incluye autenticación JWT, relaciones entre modelos, roles de usuario (admin e invitado), y pruebas automatizadas.
 
 ## 📌 Descripción del Proyecto
