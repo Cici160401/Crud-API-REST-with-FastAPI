@@ -1,141 +1,139 @@
-## CRUD API REST with FastAPI
+# CRUD API REST con FastAPI
 
-![Test](https://github.com/Cici160401/Crud-API-REST-with-FastAPI/actions/workflows/test.yml/badge.svg)
+<p align="center">
+  <a href="https://github.com/Cici160401/Crud-API-REST-with-FastAPI/actions/workflows/test.yml">
+    <img src="https://github.com/Cici160401/Crud-API-REST-with-FastAPI/actions/workflows/test.yml/badge.svg" alt="Test">
+  </a>
+  <img src="https://img.shields.io/github/last-commit/Cici160401/Crud-API-REST-with-FastAPI" alt="Último commit">
+  <img src="https://img.shields.io/badge/Python-3.12-blue" alt="Python 3.12">
+  <a href="https://render.com/images/deploy-to-render-button.svg">
+    <img src="https://render.com/images/deploy-to-render-button.svg" alt="Deploy to Render">
+  </a>
+  <img src="https://img.shields.io/badge/Hosted_on-Render-4287f5?logo=render&logoColor=white&style=flat-square" alt="Hosted on Render">
+</p>
 
-![last commit](https://img.shields.io/github/last-commit/Cici160401/Crud-API-REST-with-FastAPI)
+🔗 **URL en producción:** [https://crud-api-rest-with-fastapi.onrender.com](https://crud-api-rest-with-fastapi.onrender.com)
 
-![Python](https://img.shields.io/badge/Python-3.12-blue)
+---
 
-[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/Cici160401/Crud-API-REST-with-FastAPI)
+## 📋 Tabla de contenidos
 
-![Hosted on Render](https://img.shields.io/badge/Hosted_on-Render-4287f5?logo=render&logoColor=white&style=flat-square)
+1. [Descripción del Proyecto](#descripción-del-proyecto)  
+2. [Funcionalidades](#funcionalidades)  
+3. [Tecnologías utilizadas](#tecnologías-utilizadas)  
+4. [Testing con GitHub Actions](#testing-con-github-actions)  
+5. [Instalación y uso local](#instalación-y-uso-local)  
+6. [Endpoints principales](#endpoints-principales)  
+7. [Estructura del proyecto](#estructura-del-proyecto)  
+8. [Licencia](#licencia)  
+9. [Autor](#autor)  
 
-https://crud-api-rest-with-fastapi.onrender.com
-
-Este es un proyecto de una API REST desarrollada con FastAPI, que permite gestionar un portafolio de proyectos. Incluye autenticación JWT, relaciones entre modelos, roles de usuario (admin e invitado), y pruebas automatizadas.
+---
 
 ## 📌 Descripción del Proyecto
 
-Esta API permite gestionar:
+Este proyecto es una **API REST** desarrollada con **FastAPI** para gestionar un portafolio de proyectos. Entre sus características principales:
 
-Usuarios con roles diferenciados (admin e invitado).
+- Autenticación JWT.
+- Modelos relacionados mediante SQLAlchemy.
+- Roles de usuario: **admin** e **invitado**.
+- Pruebas automatizadas con **pytest**.
+- Preparada para integrarse con un frontend y desplegarse en producción.
 
-Categorías de proyectos.
-
-Proyectos con atributos como nombre, descripción, tecnologías, links y categorización.
-
-Comentarios asociados a proyectos.
-
-La API está diseñada para integrarse eventualmente con un frontend y estar lista para despliegue en producción.
+---
 
 ## 🚀 Funcionalidades
 
-Registro y login de usuario con JWT
+- **Registro y login** de usuario con JWT.  
+- CRUD completo de **proyectos**.  
+- Gestión de **categorías** de proyectos.  
+- **Comentarios** asociados a proyectos (incluye invitados autenticados).  
+- **Protección de rutas** según rol.  
+- **Validaciones** con Pydantic.  
 
-Creación, lectura, actualización y eliminación (CRUD) de proyectos
-
-Asociación de proyectos a múltiples categorías
-
-Comentarios de usuarios (incluyendo invitados autenticados)
-
-Rutas protegidas según rol
-
-Validaciones con Pydantic
+---
 
 ## 🛠 Tecnologías utilizadas
 
-FastAPI
+- **FastAPI**  
+- **SQLAlchemy**  
+- **MySQL**  
+- **Pydantic**  
+- **Passlib** (hashing de contraseñas)  
+- **PyJWT**  
+- **pytest**  
+- **GitHub Actions** (CI)  
 
-SQLAlchemy
-
-MySQL
-
-Pydantic
-
-Passlib (hashing de contraseñas)
-
-PyJWT
-
-pytest
-
-GitHub Actions para CI
+---
 
 ## 🧪 Testing con GitHub Actions
 
-El proyecto incluye un flujo de trabajo en .github/workflows/test.yml que:
+El flujo de trabajo en `.github/workflows/test.yml`:
 
-Se ejecuta en cada push
+1. Se ejecuta en cada **push**.  
+2. Instala dependencias.  
+3. Corre los tests automáticos (`pytest tests/test_...`).  
 
-Instala dependencias
+Además, en la carpeta `.vscode` encontrarás `tasks.json` para ejecutar tests con el botón **Run all** (Ctrl + Shift + P → Run ALL tests).  
 
-Corre los tests automáticos con pytest tests/test_....
-También existe un apartado la carpeta vscode donde el archivo tasks.json te ayuda a automatizar la ejecución de los tests
-dentro de VS Code con el botón Run all (Accedes con Ctrl + Shift + P y buscas Run ALL tests)
-
-Esto asegura que cada cambio no rompa funcionalidades existentes.
+---
 
 ## 🔧 Instalación y uso local
 
-Clona el repositorio:
+### En Linux/Mac
 
-git clone https://github.com/Cici160401/Crud-API-REST-with-FastAPI.git
-cd Crud-API-REST-with-FastAPI
+source venv/bin/activate
 
-Crea un entorno virtual e instálalo:
+## Windows
+venv\Scripts\activate
 
-python -m venv venv
-source venv/bin/activate  # o venv\Scripts\activate en Windows
+## Instala las dependencias:
 pip install -r requirements.txt
 
-Inicia el servidor:
-
+## Inicia el servidor:
 uvicorn App.main:app --reload
-
-Abre la documentación interactiva:
-
+Abre la documentación interactiva en:
 http://localhost:8000/docs
 
-## 📆 Endpoints principales
+----
+### 📆 Endpoints principales
+```plaintext
+Método	Ruta	Descripción	Acceso
+POST	/login	Login de usuario	Público
+POST	/login/guest	Login como invitado (token sin BD)	Público
+GET	/proyectos/	Listar todos los proyectos	Público
+POST	/proyectos/	Crear proyecto	Solo admin
+GET	/categorias/	Listar categorías	Público
+POST	/comentarios/	Crear comentario	Usuarios autenticados
+…	Consulta /docs	Lista completa generada con Swagger	—
 
-POST /login: login de usuario
+---
 
-POST /login/guest: login como invitado (genera token sin base de datos)
+### 🗄️ Estructura del proyecto
 
-GET /proyectos/: listar todos los proyectos
-
-POST /proyectos/: crear proyecto (solo admin)
-
-GET /categorias/: listar categorías
-
-POST /comentarios/: crear comentario (cualquier usuario autenticado)
-
-Y muchos otros. Consulta /docs para ver la lista completa generada con Swagger.
-
-## 🗄️ Estructura del proyecto
-
+```plaintext
 Crud-API-REST-with-FastAPI/
-│
 ├── App/
-│   ├── main.py               # Punto de entrada de la API
-│   ├── models/               # Modelos de SQLAlchemy
-│   ├── schemas/              # Esquemas de Pydantic
-│   ├── routes/               # Endpoints agrupados por entidad
-│   ├── crud/                 # Lógica CRUD
-│   └── auth/                 # Lógica de autenticación (JWT, roles, etc.)
+│   ├── main.py                # Punto de entrada
+│   ├── models/                # Modelos SQLAlchemy
+│   ├── schemas/               # Esquemas Pydantic
+│   ├── routes/                # Endpoints por entidad
+│   ├── crud/                  # Lógica CRUD
+│   └── auth/                  # JWT y roles
 │
-├── tests/                    # Pruebas automatizadas con Pytest
+├── tests/                     # Pruebas con pytest
 │
 ├── .github/
 │   └── workflows/
-│       └── test.yml          # Workflow para correr tests en GitHub Actions
+│       └── test.yml           # CI con GitHub Actions
 │
-├── requirements.txt          # Dependencias del proyecto
-└── README.md                 # Documentación principal
+├── requirements.txt           # Dependencias
+└── README.md                  # Documentación
 
+---
 
-## Licencia
+📄 Licencia
+Este proyecto está bajo la licencia MIT.
 
-Este proyecto está bajo la licencia MIT. Puedes usarlo y modificarlo libremente.
-
-
+👤 Autor
 Desarrollado con ❤️ por Cici160401
