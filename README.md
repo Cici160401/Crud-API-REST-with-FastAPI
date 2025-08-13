@@ -132,6 +132,21 @@ Crud-API-REST-with-FastAPI/
 
 ---
 
+### Base de Datos
+
+Este proyecto utiliza **MySQL** desplegado en **[Railway](https://railway.app/)** como servicio de base de datos en la nube.
+
+**Detalles:**
+- **Proveedor:** Railway
+- **Tipo:** MySQL 8
+- **Entorno:** Producción
+- **Conexión:**
+
+## ⚠️ **Nota:**  
+Las credenciales reales no se incluyen en este repositorio por motivos de seguridad.  
+Para conectarte a la base de datos, configura la variable de entorno:
+DATABASE_URL=mysql+pymysql://usuario:contraseña@host:puerto/base_de_datos
+
 📄 Licencia
 Este proyecto está bajo la licencia MIT.
 
