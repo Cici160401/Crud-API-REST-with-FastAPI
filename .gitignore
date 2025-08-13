@@ -13,3 +13,4 @@ __pycache__/
 # Archivos sensibles
 .env
 .env.test
+prueba_conexion.py
