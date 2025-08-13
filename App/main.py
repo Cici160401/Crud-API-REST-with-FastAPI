@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from App.routes import proyecto, categorias, comentarios
 from database import engine, Base
 from App.routes import auth
+from fastapi.middleware.cors import CORSMiddleware
 
 
 # Si ya creaste las tablas manualmente, puedes omitir esta línea
@@ -25,6 +26,19 @@ app.include_router(proyecto.router)
 app.include_router(categorias.router)
 app.include_router(comentarios.router)
 
+
+#CORS 
+origins = [
+    "http://localhost:5173",      # Vite
+    "http://127.0.0.1:5173"
+    #"https://TU-FRONTEND-DOMINIO" # cuando lo despliegues
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins, allow_credentials=True,
+    allow_methods=["*"], allow_headers=["*"],
+)
 
 
 #@app.get('/')
