@@ -13,7 +13,22 @@ app = FastAPI(
     description="CRUD para gestionar proyectos del portafolio personal",
     version="1.0.0"
 )
+# --- CORS ---
+ALLOWED_ORIGINS = [
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+    # Agrega aquí el dominio real de tu frontend cuando lo despliegues:
+    # "https://tu-frontend.netlify.app",
+]
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],        # <-- permite cualquier origen
+    allow_credentials=False,    # <-- obligatorio si usas "*"
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+# --- CORS ---
 @app.get("/")
 def read_root():
     return {"message": "¡Bienvenido a mi API REST con FastAPI! Ve a /docs para ver la documentación 📚"}
@@ -26,19 +41,6 @@ app.include_router(proyecto.router)
 app.include_router(categorias.router)
 app.include_router(comentarios.router)
 
-
-#CORS 
-origins = [
-    "http://localhost:5173",      # Vite
-    "http://127.0.0.1:5173"
-    #"https://TU-FRONTEND-DOMINIO" # cuando lo despliegues
-]
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=origins, allow_credentials=True,
-    allow_methods=["*"], allow_headers=["*"],
-)
 
 
 #@app.get('/')
