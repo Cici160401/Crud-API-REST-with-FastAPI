@@ -5,17 +5,17 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import declarative_base, sessionmaker, Session
 from dotenv import load_dotenv
 
+# Detectar Render (Render inyecta RENDER=true)
+RUNS_IN_RENDER = os.getenv("RENDER") == "true"
+
 # --- Carga de .env solo en local/test ---
 ENV = os.getenv("ENV")
 if ENV == "test":
     load_dotenv(".env.test")
-else:
-    if os.path.exists(".env"):     # en Render normalmente no existe
-        load_dotenv(".env")
+elif not RUNS_IN_RENDER and os.path.exists(".env"):
+    load_dotenv(".env")
 
-# --- Helpers ---
 def _coerce_mysql_driver(url: str | None) -> str | None:
-    """Si viene mysql:// lo convierte a mysql+pymysql:// para SQLAlchemy."""
     if not url:
         return url
     if url.startswith("mysql://"):
@@ -23,12 +23,15 @@ def _coerce_mysql_driver(url: str | None) -> str | None:
     return url
 
 def get_database_url() -> str:
-    # 1) Producción: usa DATABASE_URL si existe
+    # 1) Producción/Render: exige DATABASE_URL
     url = os.getenv("DATABASE_URL")
     if url:
         return _coerce_mysql_driver(url)
+    if RUNS_IN_RENDER:
+        # No permitas fallback a localhost en Render
+        raise RuntimeError("DATABASE_URL no está definida en el entorno de Render")
 
-    # 2) Local/CI: arma la URL con variables separadas
+    # 2) Local/CI: fallback a DB_*
     user = os.getenv("DB_USER", "root")
     pwd  = os.getenv("DB_PASSWORD", "")
     host = os.getenv("DB_HOST", "127.0.0.1")
@@ -37,19 +40,24 @@ def get_database_url() -> str:
     return f"mysql+pymysql://{user}:{pwd}@{host}:{port}/{name}"
 
 DATABASE_URL = get_database_url()
-print(f"\n[DEBUG] DATABASE_URL = {DATABASE_URL}\n", flush=True)
 
-# --- Engine y sesión ---
+# (Debug seguro: muestra host y base, no la password)
+try:
+    from urllib.parse import urlparse
+    _u = urlparse(DATABASE_URL)
+    print(f"[DEBUG] DB host={_u.hostname} port={_u.port} db={_u.path.lstrip('/')}", flush=True)
+except Exception:
+    pass
+
 engine = create_engine(
     DATABASE_URL,
-    pool_pre_ping=True,   # reconecta si la conexión quedó dormida
-    pool_recycle=1800,    # recicla cada 30 min
+    pool_pre_ping=True,
+    pool_recycle=1800,
     future=True
 )
 SessionLocal = sessionmaker(bind=engine, autocommit=False, autoflush=False, future=True)
 Base = declarative_base()
 
-# --- Dependencia FastAPI ---
 def get_db() -> Generator[Session, None, None]:
     db: Session = SessionLocal()
     try:
